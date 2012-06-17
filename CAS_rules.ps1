@@ -18,19 +18,24 @@ foreach ($mbxServer in $mbxList)
 }
 $userMailboxServer = Read-Host "Please choose a Mailbox Server by number from the list above."
 #TODO List all services by number
-Write-Host 1, "Outlook Web App"
-Write-Host 2, "Exchange ActiveSync"
-Write-Host 3, "Exchange Control Panel"
-Write-Host 4, "Exchange Web Services"
-Write-Host 5, "POP3"
-Write-Host 6, "IMAP4"
+$serviceList = @("Outlook Web App", "Exchange ActiveSync", "Exchange Control Panel", "Exchange Web Services", "POP3", "IMAP4")
+$serviceCount = 1
+foreach ($service in $serviceList)
+{
+  write-host $serviceCount, $service
+  $serviceCount += 1
+}
 $accessedService = Read-Host "Please choose a Service by number from the list above."
 #TODO List all CAS with ExternalURL for the selected service by number
 $casCount = 1
 foreach ($casServer in $casList)
 {
-  Write-Host $casCount, $casServer.Name, $casServer.Version, $casServer.ServicePack, $casServer.Site
+  if ($casServer.ExternalURL)
+    {
+      Write-Host $casCount, $casServer.Name, $casServer.Version, $casServer.ServicePack, $casServer.Site
+    }
   $casCount += 1
 }
 $accessedCAS = Read-Host "Please choose a CAS by number from the list above."
 
+Write-Host "Simulating a user from mailbox server", $mbxList[($accessedMBX - 1)].Name, "accessing", $serviceList[($accessedService - 1)], "though client access server", $casList[($accessedCAS - 1)].Name
